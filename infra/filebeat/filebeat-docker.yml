@@ -6,8 +6,9 @@ services:
     container_name: filebeat
     volumes:
       - './filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro'
-      - './../volumes/sniffer:/usr/share/network/sniffer'
-    command: filebeat -e
+      - './volumes/filebeat/data:/usr/share/filebeat/data:rw'
+      - './volumes/sniffer/network.log:/usr/share/filebeat/sniffer/network.log'
+    command: filebeat -e -strict.perms=false
     logging:
       driver: "json-file"
       options:

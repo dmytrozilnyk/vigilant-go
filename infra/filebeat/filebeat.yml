@@ -1,10 +1,10 @@
-filebeat.prospectors:
+filebeat.inputs:
   - type: log
     enabled: true
     tags:
       - net_traffic
     paths:
-      - /usr/share/network/sniffer/*.log
+      - /usr/share/filebeat/sniffer/network.log
 
 output.kafka:
   version: 0.10.2.1
