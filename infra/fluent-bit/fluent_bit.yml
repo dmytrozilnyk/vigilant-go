@@ -5,5 +5,6 @@ services:
     image: fluent/fluent-bit
     volumes:
       - ./fluent-bit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+      - ./fluent-bit/parsers.conf:/fluent-bit/etc/parsers.conf
     networks:
       - ${GLOBAL_NETWORK:-kafka}
