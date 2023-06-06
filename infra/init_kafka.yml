@@ -11,10 +11,12 @@ services:
       echo -e 'Deleting kafka topics'
       kafka-topics --bootstrap-server kafka-broker-1:9092 --topic filebeat-logs --delete --if-exists
       kafka-topics --bootstrap-server kafka-broker-1:9092 --topic fluentbit-logs --delete --if-exists
+      kafka-topics --bootstrap-server kafka-broker-1:9092 --topic packetbeat-logs --delete --if-exists
 
       echo -e 'Creating kafka topics'
       kafka-topics --bootstrap-server kafka-broker-1:9092 --create --if-not-exists --topic filebeat-logs --replication-factor 3 --partitions 3
       kafka-topics --bootstrap-server kafka-broker-1:9092 --create --if-not-exists --topic fluentbit-logs --replication-factor 3 --partitions 3
+      kafka-topics --bootstrap-server kafka-broker-1:9092 --create --if-not-exists --topic packetbeat-logs --replication-factor 3 --partitions 3
 
       echo -e 'Successfully created the following topics:'
       kafka-topics --bootstrap-server kafka-broker-1:9092 --list

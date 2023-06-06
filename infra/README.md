@@ -30,10 +30,10 @@ docker-compose -f ./common.yml -f ./filebeat/filebeat-docker.yml up
 
 **6. View the messages in the queue**
 ```bash
-docker exec --interactive --tty dockers-kafka-broker-3-1 kafka-console-consumer --bootstrap-server dockers-kafka-broker-3-1:9092 --topic filebeat-logs --from-beginning
+docker exec --interactive --tty infra-kafka-broker-3-1 kafka-console-consumer --bootstrap-server infra-kafka-broker-3-1:9092 --topic filebeat-logs --from-beginning
 ```
 
 ***Create a topic if necessary***
 ```bash
-docker exec kafka-broker kafka-topics --bootstrap-server kafka-broker:9092 --create --topic fluentbit-logs
+docker exec infra-kafka-broker-3-1 kafka-topics --bootstrap-server infra-kafka-broker-3-1:9092 --create --topic fluentbit-logs
 ```
