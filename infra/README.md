@@ -13,7 +13,7 @@ echo ruok | nc localhost 2181
 docker-compose -f common.yml -f ./kafka/kafka_cluster.yml up -d
 ```
 
-**3. Init kafka topics**
+**3. Init kafka topics (Only once)**
 ```bash
 docker-compose -f common.yml -f ./init_kafka.yml up
 ```
