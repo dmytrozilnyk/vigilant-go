@@ -3,7 +3,7 @@
 docker-compose -f common.yml -f ./zookeeper/zookeeper.yml up -d
 ```
 
-**Check if Zookeeper is ready**
+***Check if Zookeeper is ready***
 ```bash
 echo ruok | nc localhost 2181
 ```
@@ -23,12 +23,17 @@ docker-compose -f common.yml -f ./init_kafka.yml up
 docker-compose -f ./common.yml -f ./fluent-bit/fluent_bit.yml up -d
 ```
 
-**5. View the messages in the queue**
+**5. Start up filebeat container**
+```bash
+docker-compose -f ./common.yml -f ./filebeat/filebeat-docker.yml up
+```
+
+**6. View the messages in the queue**
 ```bash
 docker exec --interactive --tty dockers-kafka-broker-3-1 kafka-console-consumer --bootstrap-server dockers-kafka-broker-3-1:9092 --topic filebeat-logs --from-beginning
 ```
 
-**6. Create a topic if necessary**
+***Create a topic if necessary***
 ```bash
 docker exec kafka-broker kafka-topics --bootstrap-server kafka-broker:9092 --create --topic fluentbit-logs
 ```
