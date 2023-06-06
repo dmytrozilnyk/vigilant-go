@@ -1,0 +1,15 @@
+packetbeat.interfaces.device: any
+
+packetbeat.flows:
+  timeout: 30s
+  period: 2s
+
+output.kafka:
+  version: 0.10.2.1
+  hosts: ["kafka-broker-1:9092"]
+  topic: 'packetbeat-logs'
+  partition.round_robin:
+    reachable_only: false
+  required_acks: 1
+  compression: gzip
+  max_message_bytes: 1000000

@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+  packetbeat:
+    image: docker.elastic.co/beats/packetbeat:8.8.0
+    container_name: packetbeat
+    volumes:
+      - './packetbeat/packetbeat.yml:/usr/share/packetbeat/packetbeat.yml:ro'
+      - './volumes/packetbeat/data:/usr/share/packetbeat/data:rw'
+    command: -e -strict.perms=false
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+    networks:
+      - ${GLOBAL_NETWORK:-kafka}
