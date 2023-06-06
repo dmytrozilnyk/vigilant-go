@@ -1,0 +1,17 @@
+version: "3.7"
+
+services:
+  filebeat:
+    image: docker.elastic.co/beats/filebeat:8.8.0
+    container_name: filebeat
+    volumes:
+      - './filebeat/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro'
+      - './../volumes/sniffer:/usr/share/network/sniffer'
+    command: filebeat -e
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"
+    networks:
+      - ${GLOBAL_NETWORK:-kafka}

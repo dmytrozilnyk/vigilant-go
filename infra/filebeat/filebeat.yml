@@ -1,0 +1,17 @@
+filebeat.prospectors:
+  - type: log
+    enabled: true
+    tags:
+      - net_traffic
+    paths:
+      - /usr/share/network/sniffer/*.log
+
+output.kafka:
+  version: 0.10.2.1
+  hosts: ["kafka-broker-1:9092"]
+  topic: 'filebeat-logs'
+  partition.round_robin:
+    reachable_only: false
+  required_acks: 1
+  compression: gzip
+  max_message_bytes: 1000000

@@ -12,7 +12,7 @@ import (
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
-	fmt.Print("Enter a value (interface, sniffer or pcap): ")
+	fmt.Print("Enter a value (interface, sniffer(default) or pcap): ")
 	scanner.Scan()
 
 	input := scanner.Text()
@@ -24,7 +24,7 @@ func main() {
 	case "pcap":
 		Pcap()
 	default:
-		fmt.Print("Invalid parameters")
+		NetSniffer()
 	}
 }
 
@@ -51,6 +51,7 @@ func NetSniffer() {
 	var iface = flag.String("iface", "eth0", "Select interface where to capture")
 	var snaplen = flag.Int("snaplen", 1024, "Maximun sise to read for each packet")
 	var promisc = flag.Bool("promisc", false, "Enable promiscuous mode")
+	var fileLogs = flag.String("fileLogs", "../../infra/volumes/sniffer/network.log", "Network logs destination")
 	//var timeoutT = flag.Int("timeout", 30, "Connection Timeout in seconds")
 
 	log.Println("start")
@@ -79,6 +80,13 @@ func NetSniffer() {
 
 	packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
 
+	file, err := os.Create(*fileLogs)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	logger := log.New(file, "", log.LstdFlags)
+
 	for packet := range packetSource.Packets() {
 		//appLayer := packet.ApplicationLayer()
 		//if appLayer == nil {
@@ -86,7 +94,7 @@ func NetSniffer() {
 		//	continue
 		//}
 		//data := appLayer.Payload()
-		fmt.Println(packet)
+		logger.Println(packet)
 	}
 }
 
