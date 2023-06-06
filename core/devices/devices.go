@@ -2,13 +2,30 @@ package main
 
 import (
 	"bufio"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"github.com/google/gopacket"
+	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
 	"log"
 	"os"
 )
+
+type NetData struct {
+	LayerEthernet struct {
+		EthernetType   string
+		SourceMAC      string
+		DestinationMAC string
+	}
+	LayerIP struct {
+		TTL                int
+		NetworkFlow        string
+		Protocol           string
+		SourceAddress      string
+		DestinationAddress string
+	}
+}
 
 func main() {
 	scanner := bufio.NewScanner(os.Stdin)
@@ -78,8 +95,6 @@ func NetSniffer() {
 		}
 	}
 
-	packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
-
 	file, err := os.Create(*fileLogs)
 	if err != nil {
 		log.Fatal(err)
@@ -87,15 +102,41 @@ func NetSniffer() {
 	defer file.Close()
 	logger := log.New(file, "", log.LstdFlags)
 
+	packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
 	for packet := range packetSource.Packets() {
-		//appLayer := packet.ApplicationLayer()
-		//if appLayer == nil {
-		//	fmt.Println("Nothing")
-		//	continue
-		//}
-		//data := appLayer.Payload()
-		logger.Println(packet)
+		// Print the packet details
+
+		var netInfo NetData
+		// Extract and print the Ethernet layer
+		ethLayer := packet.Layer(layers.LayerTypeEthernet)
+		if ethLayer != nil {
+			ethPacket, _ := ethLayer.(*layers.Ethernet)
+			netInfo.LayerEthernet.EthernetType = ethPacket.EthernetType.String()
+			netInfo.LayerEthernet.SourceMAC = ethPacket.SrcMAC.String()
+			netInfo.LayerEthernet.DestinationMAC = ethPacket.DstMAC.String()
+		}
+
+		// Extract and print the IP layer
+		ipLayer := packet.Layer(layers.LayerTypeIPv4)
+		if ipLayer != nil {
+			ipPacket, _ := ipLayer.(*layers.IPv4)
+			netInfo.LayerIP.TTL = int(ipPacket.TTL)
+			netInfo.LayerIP.NetworkFlow = ipPacket.NetworkFlow().String()
+			netInfo.LayerIP.Protocol = ipPacket.Protocol.String()
+			netInfo.LayerIP.SourceAddress = ipPacket.SrcIP.String()
+			netInfo.LayerIP.DestinationAddress = ipPacket.SrcIP.String()
+		}
+
+		bytesInfo, err := json.Marshal(netInfo)
+		if err != nil {
+			log.Fatalf("marshal error - %v", err)
+			break
+		}
+		logger.Println(string(bytesInfo))
+
+		//logger.Println(packet)
 	}
+
 }
 
 func Pcap() {
