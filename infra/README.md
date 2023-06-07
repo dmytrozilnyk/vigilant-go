@@ -28,7 +28,12 @@ docker-compose -f ./common.yml -f ./fluent-bit/fluent_bit.yml up -d
 docker-compose -f ./common.yml -f ./filebeat/filebeat-docker.yml up
 ```
 
-**6. View the messages in the queue**
+**6. Start up packetbeat container**
+```bash
+docker-compose -f ./common.yml -f ./packetbeat/packetbeat-docker.yml up
+```
+
+**7. View the messages in the queue**
 ```bash
 docker exec --interactive --tty infra-kafka-broker-3-1 kafka-console-consumer --bootstrap-server infra-kafka-broker-3-1:9092 --topic filebeat-logs --from-beginning
 ```
