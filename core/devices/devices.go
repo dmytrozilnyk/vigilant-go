@@ -121,10 +121,10 @@ func NetSniffer() {
 		if ipLayer != nil {
 			ipPacket, _ := ipLayer.(*layers.IPv4)
 			netInfo.LayerIP.TTL = int(ipPacket.TTL)
-			netInfo.LayerIP.NetworkFlow = ipPacket.NetworkFlow().String()
+			netInfo.LayerIP.NetworkFlow = ipPacket.NetworkFlow().Dst().String()
 			netInfo.LayerIP.Protocol = ipPacket.Protocol.String()
 			netInfo.LayerIP.SourceAddress = ipPacket.SrcIP.String()
-			netInfo.LayerIP.DestinationAddress = ipPacket.SrcIP.String()
+			netInfo.LayerIP.DestinationAddress = ipPacket.DstIP.String()
 		}
 
 		bytesInfo, err := json.Marshal(netInfo)
