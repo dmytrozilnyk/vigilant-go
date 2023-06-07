@@ -25,12 +25,12 @@ docker-compose -f ./common.yml -f ./fluent-bit/fluent_bit.yml up -d
 
 **5. Start up filebeat container**
 ```bash
-docker-compose -f ./common.yml -f ./filebeat/filebeat-docker.yml up
+docker-compose -f ./common.yml -f ./filebeat/filebeat-docker.yml up -d
 ```
 
 **6. Start up packetbeat container**
 ```bash
-docker-compose -f ./common.yml -f ./packetbeat/packetbeat-docker.yml up
+docker-compose -f ./common.yml -f ./packetbeat/packetbeat-docker.yml up -d
 ```
 
 **7. View the messages in the queue**
