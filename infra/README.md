@@ -5,7 +5,7 @@ docker-compose -f common.yml -f ./zookeeper/zookeeper.yml up -d
 
 ***Check if Zookeeper is ready***
 ```bash
-echo ruok | nc localhost 2181
+echo ruok | nc localhost 12181
 ```
 
 **2. Start up kafka container**
@@ -18,24 +18,24 @@ docker-compose -f common.yml -f ./kafka/kafka_cluster.yml up -d
 docker-compose -f common.yml -f ./init_kafka.yml up
 ```
 
-**4. Start up fluent bit container**
+**4. Start up logstash container**
+```bash
+docker-compose -f ./common.yml -f ./elk/elk-docker.yml up -d
+```
+
+**5. Start up fluent bit container**
 ```bash
 docker-compose -f ./common.yml -f ./fluent-bit/fluent_bit.yml up -d
 ```
 
-**5. Start up filebeat container**
+**6. Start up filebeat container**
 ```bash
 docker-compose -f ./common.yml -f ./filebeat/filebeat-docker.yml up -d
 ```
 
-**6. Start up packetbeat container**
+**7. Start up packetbeat container**
 ```bash
 docker-compose -f ./common.yml -f ./packetbeat/packetbeat-docker.yml up -d
-```
-
-**7. Start up logstash container**
-```bash
-docker-compose -f ./common.yml -f ./elk/elk-docker.yml up -d
 ```
 
 **8. View the messages in the queue**
