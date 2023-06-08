@@ -33,7 +33,12 @@ docker-compose -f ./common.yml -f ./filebeat/filebeat-docker.yml up -d
 docker-compose -f ./common.yml -f ./packetbeat/packetbeat-docker.yml up -d
 ```
 
-**7. View the messages in the queue**
+**7. Start up logstash container**
+```bash
+docker-compose -f ./common.yml -f ./elk/elk-docker.yml up -d
+```
+
+**8. View the messages in the queue**
 ```bash
 docker exec --interactive --tty infra-kafka-broker-3-1 kafka-console-consumer --bootstrap-server infra-kafka-broker-3-1:9092 --topic filebeat-logs --from-beginning
 ```
